@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Genera Invito</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fefefe;
+      text-align: center;
+      padding: 2em;
+    }
+
+    input, button {
+      padding: 0.8em;
+      margin: 0.5em;
+      width: 80%;
+      font-size: 1em;
+    }
+
+    #output {
+      margin-top: 2em;
+    }
+
+    .qr {
+      margin-top: 1em;
+    }
+
+    a.whatsapp-link {
+      display: inline-block;
+      background: #25D366;
+      color: white;
+      padding: 1em 2em;
+      margin-top: 1.5em;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎟️ Genera Invito</h1>
+  <form id="invitoForm">
+    <input type="text" name="nome" placeholder="Nome" required>
+    <input type="text" name="cognome" placeholder="Cognome" required>
+    <button type="submit">Cerca</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script>
+    function slugify(text) {
+      return text.toLowerCase().trim().replace(/\s+/g, "-");
+    }
+
+    document.getElementById("invitoForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const nome = e.target.nome.value;
+      const cognome = e.target.cognome.value;
+
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwRt2ivnC3yTJTjL3PsKjY6VTGhDsnRr5ADYuZ9ZfOXx3OlhShsVtSoyCoI6qFOUy8t/exec?nome=" + encodeURIComponent(nome) + "&cognome=" + encodeURIComponent(cognome));
+      const data = await response.json();
+
+      const output = document.getElementById("output");
+      output.innerHTML = "";
+
+      if (data.presente) {
+        const fullName = nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase() + " " +
+                         cognome.charAt(0).toUpperCase() + cognome.slice(1).toLowerCase();
+        const link = `https://ptrtella.github.io/Arzella/check.html?id=${data.id}`;
+        const whatsappText = encodeURIComponent(`🎉 Ciao ${fullName}!\nEcco il tuo invito alla festa Arzella:\n${link}`);
+        const qrImg = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;
+
+        output.innerHTML = `
+          <h2>✅ Invitato trovato</h2>
+          <p><strong>${fullName}</strong></p>
+          <p><a href="${link}" target="_blank">${link}</a></p>
+          <div class="qr"><img src="${qrImg}" alt="QR Code"></div>
+          <a class="whatsapp-link" href="https://wa.me/?text=${whatsappText}" target="_blank">Condividi su WhatsApp</a>
+        `;
+      } else {
+        output.innerHTML = `<p style="color:red;">❌ Questo invitato non è presente nella lista.</p>`;
+      }
+    };
+  </script>
+</body>
+</html>
