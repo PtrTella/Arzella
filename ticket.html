@@ -2,83 +2,47 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Arzella di maggio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <title>Biglietto Arzella</title>
   <style>
     body {
-      margin: 0;
-      padding: 2em 1em;
-      font-family: 'Playfair Display', serif;
-      background-color: #fff;
-      color: #005f73;
+      font-family: sans-serif;
       text-align: center;
+      padding: 2em;
+      background: white;
+      color: #005f73;
     }
-
-    h1 {
-      font-size: 3em;
-      color: #0e939c;
-      margin-bottom: 0.2em;
-    }
-
     .box {
       background: #fdf6e3;
       border-radius: 16px;
-      padding: 2.5em 1.5em;
-      max-width: 700px;
-      margin: 0 auto;
+      padding: 2em;
+      max-width: 600px;
+      margin: auto;
       box-shadow: 0 8px 20px rgba(0,0,0,0.05);
     }
-
-    .subtitle {
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 1.2em;
-      color: #f4a261;
-      margin-bottom: 1.5em;
-      letter-spacing: 2px;
-    }
-
     .line {
       font-size: 1.2em;
       margin: 1em 0;
-      color: #333;
     }
-
     .emphasis {
       font-weight: 800;
       font-size: 2em;
       text-transform: uppercase;
-      margin-top: 1.5em;
-      margin-bottom: 0.7em;
+      margin: 1em 0;
       color: #ee9b00;
-      letter-spacing: 1px;
     }
-
     .not-found {
       color: #ae2012;
       font-weight: 600;
-      font-size: 1.2em;
-    }
-
-    img.location {
-      max-width: 100%;
-      border-radius: 14px;
-      margin-top: 2em;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
   <h1>Arzella di maggio</h1>
 
-  <div class="box" id="result">
-    <div class="subtitle">Invito</div>
-    Caricamento in corso...
-  </div>
+  <div class="box" id="result">Verifica in corso...</div>
 
   <script>
-    // Funzione per capitalizzare nome-cognome
-    function capitalizeId(slug) {
+    function capitalize(slug) {
       return slug
         .split('-')
         .map(part => part.charAt(0).toUpperCase() + part.slice(1))
@@ -87,43 +51,33 @@
 
     async function checkGuest() {
       const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
-      const resultEl = document.getElementById("result");
+      const id = params.get("id"); // es. lorenza-baldisserri
 
       if (!id) {
-        resultEl.innerHTML = `
-          <div class="subtitle">Invito</div>
-          <div class="not-found">ID mancante.</div>
-        `;
+        document.getElementById("result").innerHTML = "<div class='not-found'>ID mancante.</div>";
         return;
       }
 
-      try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbwRt2ivnC3yTJTjL3PsKjY6VTGhDsnRr5ADYuZ9ZfOXx3OlhShsVtSoyCoI6qFOUy8t/exec?id=" + encodeURIComponent(id));
-        const data = await response.json();
+      const [nome, cognome] = id.split("-");
 
-        if (data.presente) {
-          resultEl.innerHTML = `
-            <div class="subtitle">Invito</div>
-            <div class="line"><strong>${capitalizeId(id)}</strong>, grazie per la partecipazione.</div>
-            <div class="line">✅ Sei stato aggiunto alla lista.</div>
-            <div class="emphasis">La prima vera festa</div>
-            <div class="line">sabato 10 maggio ore 20,30</div>
-            <div class="line">Imola, via Codrignano 58p (3° km dalla Curva della Tosa)</div>
-            <img class="location" src="poolArzella.jpg" alt="Foto location">
-          `;
-        } else {
-          resultEl.innerHTML = `
-            <div class="subtitle">Invito</div>
-            <div class="not-found">
-              Salve, se hai effettuato il pagamento riceverai presto un link con il tuo invito.
-            </div>
-          `;
-        }
-      } catch (err) {
+      const url = `https://script.google.com/macros/s/AKfycbwRt2ivnC3yTJTjL3PsKjY6VTGhDsnRr5ADYuZ9ZfOXx3OlhShsVtSoyCoI6qFOUy8t/exec?nome=${nome}&cognome=${cognome}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      const resultEl = document.getElementById("result");
+
+      if (data.presente) {
+        const fullName = capitalize(id);
         resultEl.innerHTML = `
-          <div class="subtitle">Invito</div>
-          <div class="not-found">⚠️ Errore nel recupero dei dati. Riprova più tardi.</div>
+          <div class="line"><strong>${fullName}</strong>, grazie per la partecipazione.</div>
+          <div class="line">✅ Sei stato aggiunto alla lista.</div>
+          <div class="emphasis">La prima vera festa</div>
+          <div class="line">sabato 10 maggio ore 20,30</div>
+          <div class="line">Imola, via Codrignano 58p (3° km dalla Curva della Tosa)</div>
+        `;
+      } else {
+        resultEl.innerHTML = `
+          <div class="not-found">Salve, se hai effettuato il pagamento riceverai presto un link con il tuo invito.</div>
         `;
       }
     }
