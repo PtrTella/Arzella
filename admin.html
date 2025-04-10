@@ -1,0 +1,44 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Aggiungi Invitato</title>
+  <style>
+    body { font-family: sans-serif; max-width: 400px; margin: auto; padding: 2em; }
+    input, button { width: 100%; margin: 0.5em 0; padding: 0.7em; }
+    .result { margin-top: 1em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Aggiungi Invitato</h2>
+  <form id="form">
+    <input type="text" name="nome" placeholder="Nome" required>
+    <input type="text" name="cognome" placeholder="Cognome" required>
+    <button type="submit">Genera QR e Aggiungi</button>
+  </form>
+  <div class="result" id="result"></div>
+
+  <script>
+    document.getElementById("form").onsubmit = async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const nome = form.nome.value;
+      const cognome = form.cognome.value;
+
+      const res = await fetch("https://script.google.com/macros/s/TUO_SCRIPT_ID/exec", {
+        method: "POST",
+        body: JSON.stringify({ nome, cognome }),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      const data = await res.json();
+      document.getElementById("result").innerHTML = `
+        ✅ Invitato aggiunto!<br>
+        <a href="${data.url}" target="_blank">🔗 ${data.url}</a><br>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.url)}">
+      `;
+    };
+  </script>
+</body>
+</html>
