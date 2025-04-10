@@ -18,26 +18,33 @@
   </form>
   <div class="result" id="result"></div>
 
-  <script>
-    document.getElementById("form").onsubmit = async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const nome = form.nome.value;
-      const cognome = form.cognome.value;
+<script>
+document.getElementById("form").onsubmit = async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const nome = form.nome.value;
+  const cognome = form.cognome.value;
 
-      const res = await fetch("https://script.google.com/macros/s/AKfycbwRt2ivnC3yTJTjL3PsKjY6VTGhDsnRr5ADYuZ9ZfOXx3OlhShsVtSoyCoI6qFOUy8t/exec", {
-        method: "POST",
-        body: JSON.stringify({ nome, cognome }),
-        headers: { "Content-Type": "application/json" }
-      });
+  const params = new URLSearchParams();
+  params.append("nome", nome);
+  params.append("cognome", cognome);
 
-      const data = await res.json();
-      document.getElementById("result").innerHTML = `
-        ✅ Invitato aggiunto!<br>
-        <a href="${data.url}" target="_blank">🔗 ${data.url}</a><br>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.url)}">
-      `;
-    };
-  </script>
+  const res = await fetch("https://script.google.com/macros/s/AKfycbwRt2ivnC3yTJTjL3PsKjY6VTGhDsnRr5ADYuZ9ZfOXx3OlhShsVtSoyCoI6qFOUy8t/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: params.toString()
+  });
+
+  const data = await res.json();
+  document.getElementById("result").innerHTML = `
+    ✅ Invitato aggiunto!<br>
+    <a href="${data.url}" target="_blank">🔗 ${data.url}</a><br>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.url)}">
+  `;
+};
+</script>
+
 </body>
 </html>
