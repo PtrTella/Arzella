@@ -67,6 +67,9 @@
   <div class="box" id="result">
     <div class="subtitle">Invito</div>
     Caricamento in corso...
+    <div class="not-found">
+    ⚠️ Per visualizzare il tuo invito, apri il link personalizzato che ti è stato inviato.
+    </div>
   </div>
 
   <script>
@@ -80,6 +83,9 @@
     async function checkGuest() {
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
+
+      if (!id || !id.includes("-")) return;
+      
       const resultEl = document.getElementById("result");
     
       if (!id) {
