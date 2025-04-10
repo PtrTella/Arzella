@@ -67,7 +67,7 @@
       if (data.presente) {
         const fullName = nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase() + " " +
                          cognome.charAt(0).toUpperCase() + cognome.slice(1).toLowerCase();
-        const link = `https://ptrtella.github.io/Arzella/check.html?id=${data.id}`;
+        const link = `https://ptrtella.github.io/Arzella/ticket.html?id=${data.id}`;
         const whatsappText = encodeURIComponent(`🎉 Ciao ${fullName}!\nEcco il tuo invito alla festa Arzella:\n${link}`);
         const qrImg = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link)}`;
 
