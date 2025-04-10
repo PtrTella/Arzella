@@ -26,7 +26,7 @@
       const nome = form.nome.value;
       const cognome = form.cognome.value;
 
-      const res = await fetch("https://script.google.com/macros/s/TUO_SCRIPT_ID/exec", {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbwaSzPHSB6C_3WiQ7usolcgfiELb2EmMnyQpuhaycDpClIaJgqGleKjiNti8v548rNY/exec", {
         method: "POST",
         body: JSON.stringify({ nome, cognome }),
         headers: { "Content-Type": "application/json" }
