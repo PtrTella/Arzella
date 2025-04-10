@@ -3,61 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <title>Arzella di maggio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Helvetica Neue', Helvetica, sans-serif;
-      background: white;
-      color: #006d77;
-      padding: 3em 1em;
+      margin: 0;
+      padding: 2em 1em;
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
+      color: #005f73;
       text-align: center;
     }
 
     h1 {
-      font-size: 2.8em;
-      color: #007f91;
+      font-family: 'Playfair Display', serif;
+      font-size: 3em;
+      color: #0e939c;
       margin-bottom: 0.2em;
     }
 
     .subtitle {
-      font-weight: bold;
+      font-weight: 600;
       text-transform: uppercase;
-      font-size: 1.4em;
+      font-size: 1.2em;
+      color: #f4a261;
       margin-bottom: 2em;
       letter-spacing: 2px;
     }
 
     .box {
-      display: inline-block;
-      background: #f8f9fa;
-      border: 1px solid #e0f7fa;
-      border-radius: 12px;
-      padding: 2em 2em;
-      max-width: 500px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      background: #fdf6e3;
+      border-radius: 16px;
+      padding: 2em;
+      max-width: 600px;
+      margin: 0 auto 2em;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
     }
 
     .line {
       font-size: 1.2em;
       margin: 1em 0;
+      color: #333;
     }
 
     .emphasis {
       font-weight: bold;
       font-style: italic;
-      color: #005f73;
+      color: #ee9b00;
     }
 
     .not-found {
-      color: #b00020;
+      color: #ae2012;
+      font-weight: 500;
+    }
+
+    img.location {
+      max-width: 100%;
+      border-radius: 16px;
+      margin-top: 1.5em;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
   <h1>Arzella di maggio</h1>
-  <div class="subtitle">INVITO</div>
+  <div class="subtitle">Invito</div>
 
   <div class="box" id="result">Caricamento in corso...</div>
+
+  <!-- 🖼️ Sostituisci src con il nome del file immagine caricato nella repo -->
+  <img class="location" src="poolArzella.jpg" alt="Foto location">
 
   <script>
     async function checkGuest() {
@@ -66,7 +80,7 @@
       const resultEl = document.getElementById("result");
 
       if (!id) {
-        resultEl.innerHTML = "<div class='not-found'>❌ ID mancante.</div>";
+        resultEl.innerHTML = "<div class='not-found'>ID mancante.</div>";
         return;
       }
 
@@ -84,7 +98,9 @@
           `;
         } else {
           resultEl.innerHTML = `
-            <div class="line not-found">Salve, se hai effettuato il pagamento riceverai presto un link con il tuo invito.</div>
+            <div class="line not-found">
+              Salve, se hai effettuato il pagamento riceverai presto un link con il tuo invito.
+            </div>
           `;
         }
       } catch (err) {
