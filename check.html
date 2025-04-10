@@ -23,13 +23,12 @@
         return;
       }
 
-      const response = await fetch("invitati.json"); // Esporta o genera questo file
-      const lista = await response.json();
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwRt2ivnC3yTJTjL3PsKjY6VTGhDsnRr5ADYuZ9ZfOXx3OlhShsVtSoyCoI6qFOUy8t/exec?id=" + encodeURIComponent(id));
+      const data = await response.json();
 
-      const presente = lista.includes(id.toLowerCase());
       const resultEl = document.getElementById("result");
 
-      if (presente) {
+      if (data.presente) {
         resultEl.innerHTML = `<span class="ok">✅ Benvenuto, ${id.replace(/-/g, ' ')}</span>`;
       } else {
         resultEl.innerHTML = `<span class="not-ok">❌ ${id.replace(/-/g, ' ')} non è nella lista</span>`;
