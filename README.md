@@ -1,2 +1,3 @@
 # Arzella
-[admin.html](admin.html)
+[List Management](admin.html)
+[Check Invitate](check.html)
