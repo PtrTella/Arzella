@@ -1,3 +1,2 @@
 # Arzella
-
-()[admin.html]
+[admin.html](admin.html)
