@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Verifica Invito</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2em; }
+    .result { font-size: 1.5em; margin-top: 2em; }
+    .ok { color: green; }
+    .not-ok { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Verifica Invito</h1>
+  <div class="result" id="result">Caricamento in corso...</div>
+
+  <script>
+    async function checkGuest() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      if (!id) {
+        document.getElementById("result").textContent = "ID mancante";
+        return;
+      }
+
+      const response = await fetch("invitati.json"); // Esporta o genera questo file
+      const lista = await response.json();
+
+      const presente = lista.includes(id.toLowerCase());
+      const resultEl = document.getElementById("result");
+
+      if (presente) {
+        resultEl.innerHTML = `<span class="ok">✅ Benvenuto, ${id.replace(/-/g, ' ')}</span>`;
+      } else {
+        resultEl.innerHTML = `<span class="not-ok">❌ ${id.replace(/-/g, ' ')} non è nella lista</span>`;
+      }
+    }
+
+    checkGuest();
+  </script>
+</body>
+</html>
